@@ -4,14 +4,10 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>탈모맵</title>
-
-  <!-- ★ 핵심 수정: GitHub Pages 경로 보정용 base 태그 추가 ★ -->
-  <base href="/talmomap-web/">
-
   <!-- 파비콘 -->
   <link rel="icon" type="image/x-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='75'>💊</text></svg>">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
+  
   <!-- ===== CSS 파일 분리 (모든 스타일이 별도 CSS 파일에 있음) ===== -->
   <!-- main.css (기본 스타일: 폰트, 색상, 애니메이션, 글로벌 요소) -->
   <link rel="stylesheet" href="css/main.css">
@@ -21,7 +17,7 @@
   <link rel="stylesheet" href="css/components.css">
   <!-- responsive.css (반응형 스타일: 모바일/태블릿/데스크탑 화면 크기별 조정) -->
   <link rel="stylesheet" href="css/responsive.css">
-
+  
   <!-- 카카오 지도 SDK 로드 -->
   <script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=0d2e650cecb8f7b3f79a14826495b876&libraries=services"></script>
 </head>
@@ -45,6 +41,7 @@
       <button class="menu-item" data-page="subscribe" title="구독" aria-label="구독"><i class="fas fa-crown"></i><span class="menu-label">구독</span></button>
     </nav>
   </aside>
+
   <!-- 메인 컨텐츠 영역: 지도, 페이지, 사이드 패널 -->
   <main class="main-content">
     <!-- 지도 페이지 (기본 페이지) -->
@@ -61,12 +58,14 @@
       </div>
       <!-- 지도 렌더링 영역 (map.js에서 초기화) -->
       <div id="map"></div>
+
       <!-- 사이드 패널: 약국 목록, 상세 정보, 활동, 구독 탭 -->
       <aside class="side-panel" id="side-panel">
         <button class="panel-close" id="panel-close">×</button>
         <div class="panel-tabs">
           <!-- 약국 목록 섹션 -->
           <div id="panel-list" class="panel-section"></div>
+
           <!-- 약국 상세 정보 섹션 -->
           <div id="panel-detail" class="panel-section" style="display:none;">
             <div class="panel-header">
@@ -83,6 +82,7 @@
               </div>
             </div>
           </div>
+
           <!-- 활동 기록 섹션 -->
           <div id="panel-activity" class="panel-section" style="display:none;">
             <div class="panel-header">
@@ -93,6 +93,7 @@
             <div class="panel-empty" style="padding:20px;text-align:center;color:#888;"><i class="fas fa-inbox" style="font-size:22px;margin-bottom:8px;display:block;"></i>활동이 없습니다</div>
             <ul id="activity-list" style="list-style:none;padding-left:0;margin-top:12px;"></ul>
           </div>
+
           <!-- 구독 섹션 -->
           <div id="panel-subscribe" class="panel-section" style="display:none;">
             <div class="panel-header">
@@ -104,12 +105,14 @@
         </div>
       </aside>
     </section>
+
     <!-- 활동 페이지 (구 index의 page-activity) -->
     <section id="page-activity" class="page">
       <h2 style="padding:16px;margin:0;">활동 내역</h2>
       <p style="padding:16px;margin:0;">최근 방문 약국과 검색 기록이 표시됩니다.</p>
       <div id="page-activity-list" style="padding:16px;"></div>
     </section>
+
     <!-- 구독 페이지 (구 index의 page-subscribe) -->
     <section id="page-subscribe" class="page">
       <h2 style="padding:16px;margin:0;">구독</h2>
@@ -198,38 +201,57 @@
   </div>
 
   <!-- ===== JavaScript 파일 로드 순서 (중요: 아래 순서를 지켜야 함) ===== -->
-
+  
   <!-- 1. 설정 (다른 모듈의 기반이 되는 필수 파일) -->
   <script src="js/config.js"></script>
-
+  <!-- config.js (설정: API 키, 상수값, 디버그 모드 등) -->
+  
   <!-- 2. 유틸리티 (여러 모듈에서 공통으로 사용하는 함수들) -->
   <script src="js/utils/storage.js"></script>
+  <!-- storage.js (저장소: localStorage CRUD 작업, 활동/구독/댓글 관리) -->
   <script src="js/utils/helpers.js"></script>
+  <!-- helpers.js (헬퍼: 포맷팅, 검증, 디바운스/쓰로틀 유틸리티 함수들) -->
   <script src="js/utils/api.js"></script>
-
+  <!-- api.js (API: 카카오 로컬 검색, 지오코딩, 에러 핸들링) -->
+  
   <!-- 3. UI 컴포넌트 (사용자 인터페이스 요소 관리) -->
   <script src="js/ui/toast.js"></script>
+  <!-- toast.js (알림: 성공/실패/경고 메시지 표시 및 자동 사라지기) -->
   <script src="js/ui/panel.js"></script>
-
+  <!-- panel.js (패널: 사이드 패널 열기/닫기, 섹션 전환, 지도 팬 효과) -->
+  
   <!-- 4. 지도 초기화 (카카오 지도 SDK 로드 및 마커 생성) -->
   <script src="js/map.js"></script>
-
+  <!-- map.js (지도: 카카오 맵 초기화, 마커 렌더링, 오버레이 관리) -->
+  
   <!-- 5. 기능 모듈들 (각 기능별 비즈니스 로직) -->
   <script src="js/features/pharmacy.js"></script>
+  <!-- pharmacy.js (약국: 목록 렌더링, 상세 표시, 검색, 댓글 관리) -->
   <script src="js/features/consent.js"></script>
-
+  <!-- consent.js (동의: 위치정보 수집·이용 동의 모달, 로컬스토리지 관리) -->
+  
   <!-- 5-1. 위치 및 지도 기능 (분리된 모듈) -->
   <script src="js/features/location/userLocation.js"></script>
+  <!-- userLocation.js (위치: 현재 위치 조회, 사용자 마커 표시) -->
   <script src="js/features/location/pharmacyMarker.js"></script>
+  <!-- pharmacyMarker.js (마커: 약국 마커 생성, 표시, 제거) -->
   <script src="js/features/location/pharmacySearch.js"></script>
+  <!-- pharmacySearch.js (검색: 주변 약국 검색, 목록 업데이트) -->
   <script src="js/features/location/pharmacyPopup.js"></script>
+  <!-- pharmacyPopup.js (팝업: 약국 상세 정보 표시) -->
   <script src="js/features/location/panelInteraction.js"></script>
+  <!-- panelInteraction.js (패널: 드래그, 토글 기능) -->
   <script src="js/features/location/mapAnimation.js"></script>
+  <!-- mapAnimation.js (애니메이션: 줌, 중심 이동 애니메이션) -->
   <script src="js/features/location.js"></script>
+  <!-- location.js (위치 관리자 메인: 초기화, 이벤트 연결) -->
   <script src="js/features/activity.js"></script>
+  <!-- activity.js (활동: 활동 기록 CRUD, 시간 ago 포맷팅, 삭제 기능) -->
   <script src="js/features/subscription.js"></script>
-
+  <!-- subscription.js (구독: 구독 상태 관리, UI 업데이트, 결제 시뮬레이션) -->
+  
   <!-- 6. 메인 앱 진입점 (마지막에 로드하여 모든 모듈 초기화) -->
   <script src="js/main.js"></script>
+  <!-- main.js (진입점: 앱 초기화, 모듈 검증, 글로벌 이벤트 리스너 설정) -->
 </body>
 </html>

@@ -1,24 +1,17 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="utf-8">
+<meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>탈모맵</title>
-
-  <!-- ★ 핵심 수정: 정확한 base 태그 (저장소 이름 맞춤) ★ -->
-  <base href="/talmomap-web/">
-
-  <!-- 파비콘 -->
   <link rel="icon" type="image/x-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='75'>💊</text></svg>">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
-  <!-- ===== CSS 파일 ===== -->
-  <link rel="stylesheet" href="css/main.css">
-  <link rel="stylesheet" href="css/layout.css">
-  <link rel="stylesheet" href="css/components.css">
-  <link rel="stylesheet" href="css/responsive.css">
-
-  <!-- 카카오 지도 SDK -->
+  
+  <link rel="stylesheet" href="main.css">
+  <link rel="stylesheet" href="layout.css">
+  <link rel="stylesheet" href="components.css">
+  <link rel="stylesheet" href="responsive.css">
+  
   <script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=0d2e650cecb8f7b3f79a14826495b876&libraries=services"></script>
 </head>
 <body>
@@ -189,25 +182,30 @@
   </div>
 </div>
 
-<!-- JavaScript 파일들 (순서 중요) -->
-<script src="js/config.js"></script>
-<script src="js/utils/storage.js"></script>
-<script src="js/utils/helpers.js"></script>
-<script src="js/utils/api.js"></script>
-<script src="js/ui/toast.js"></script>
-<script src="js/ui/panel.js"></script>
-<script src="js/map.js"></script>
-<script src="js/features/pharmacy.js"></script>
-<script src="js/features/consent.js"></script>
-<script src="js/features/location/userLocation.js"></script>
-<script src="js/features/location/pharmacyMarker.js"></script>
-<script src="js/features/location/pharmacySearch.js"></script>
-<script src="js/features/location/pharmacyPopup.js"></script>
-<script src="js/features/location/panelInteraction.js"></script>
-<script src="js/features/location/mapAnimation.js"></script>
-<script src="js/features/location.js"></script>
-<script src="js/features/activity.js"></script>
-<script src="js/features/subscription.js"></script>
-<script src="js/main.js"></script>
+<script src="config.js"></script>
+  
+  <script src="storage.js"></script>
+  <script src="helpers.js"></script>
+  <script src="api.js"></script>
+  
+  <script src="toast.js"></script>
+  <script src="panel.js"></script>
+  
+  <script src="map.js"></script>
+  
+  <script src="pharmacy.js"></script>
+  <script src="consent.js"></script>
+  
+  <script src="userLocation.js"></script>
+  <script src="pharmacyMarker.js"></script>
+  <script src="pharmacySearch.js"></script>
+  <script src="pharmacyPopup.js"></script>
+  <script src="panelInteraction.js"></script>
+  <script src="mapAnimation.js"></script>
+  <script src="location.js"></script>
+  <script src="activity.js"></script>
+  <script src="subscription.js"></script>
+  
+  <script src="main.js"></script>
 </body>
 </html>

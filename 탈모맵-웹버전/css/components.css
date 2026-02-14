@@ -1,0 +1,558 @@
+/* ===================================
+   UI 컴포넌트 스타일
+   약국 리스트, 팝업, 테이블, 카드,
+   버튼, 입력창 등의 스타일
+   =================================== */
+
+/* ===== 약국 리스트 ===== */
+.pharmacy-list {
+  padding: 20px;
+}
+
+/* 약국 아이템 */
+.pharmacy-item {
+  background: white;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.pharmacy-item:hover {
+  transform: translateY(-2px);
+}
+
+/* 약국 아이템 헤더 (이름 + 거리) */
+.item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.item-header h3 {
+  margin: 0;
+  font-size: 18px;
+}
+
+/* 거리 표시 */
+.distance {
+  color: #4a90e2;
+  font-weight: bold;
+}
+
+/* 약국 상태 (영업중/재고) */
+.status {
+  color: #22c55e;
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+
+/* 약국 주소 */
+.address {
+  color: #666;
+  font-size: 14px;
+}
+
+/* ===== 팝업 (약국 상세 정보) ===== */
+#pharmacy-popup {
+  position: fixed;
+  bottom: 0;
+  left: 96px;
+  width: calc(100% - 96px);
+  max-height: 55vh;
+  background: white;
+  border-radius: 20px 20px 0 0;
+  padding: 24px;
+  box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.2);
+  transform: translateY(100%);
+  transition: transform 0.5s ease;
+  z-index: 1300 !important;
+  overflow-y: auto;
+}
+
+/* 팝업 열기 상태 */
+#pharmacy-popup.show {
+  transform: translateY(0);
+}
+
+/* 팝업 헤더 */
+.popup-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+/* 팝업 닫기 버튼 */
+.popup-close {
+  background: #f0f0f0;
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  cursor: pointer;
+  font-size: 24px;
+}
+
+/* 팝업 테이블 */
+.popup-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 16px 0;
+}
+
+.popup-table th,
+.popup-table td {
+  border: 1px solid #eee;
+  padding: 12px;
+  text-align: left;
+}
+
+.popup-table th {
+  background: #f8f9fa;
+}
+
+/* 팝업 메타데이터 */
+.popup-meta {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-top: 8px;
+}
+
+/* ===== 구독 카드 ===== */
+.status-card {
+  border: 2px solid #4a90e2;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 16px;
+  text-align: center;
+  background: #f8f9fa;
+}
+
+/* 구독 프리미엄 카드 */
+.subscribe-card {
+  background: linear-gradient(135deg, #fff7ed, #fff1e6);
+  border: 2px solid #fdba74;
+  border-radius: 24px;
+  padding: 24px;
+  text-align: center;
+  margin-bottom: 16px;
+  box-shadow: 0 8px 24px rgba(250, 196, 106, 0.1);
+}
+
+/* 구독 카드 아바타 */
+.subscribe-card .avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 999px;
+  background: #f97316;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 12px;
+  font-size: 32px;
+}
+
+/* 구독 카드 가격 */
+.subscribe-card .price {
+  font-size: 28px;
+  font-weight: bold;
+  color: #c2410c;
+}
+
+/* 구독 카드 설명 */
+.subscribe-card .muted {
+  color: #6b7280;
+  font-size: 13px;
+}
+
+/* 구독 카드 CTA 버튼 */
+.subscribe-card .cta {
+  width: 100%;
+  padding: 16px;
+  border-radius: 16px;
+  background: linear-gradient(90deg, #f97316, #fb923c);
+  color: white;
+  font-weight: 800;
+  font-size: 18px;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(249, 115, 22, 0.12);
+}
+
+/* ===== 결제 수단 버튼 ===== */
+.payment-methods {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.payment-methods button {
+  padding: 12px;
+  background: #f0f0f0;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.2s;
+}
+
+/* 카카오페이 버튼 */
+.payment-methods .pm-kakao {
+  background: #FEE500;
+  color: #111;
+  border: none;
+}
+
+/* 카드 결제 버튼 */
+.payment-methods .pm-card {
+  background: white;
+  border: 1px solid #e5e7eb;
+}
+
+/* Apple Pay 버튼 */
+.payment-methods .pm-apple {
+  background: black;
+  color: white;
+}
+
+/* ===== 관리 버튼 ===== */
+.manage-btn {
+  width: 100%;
+  padding: 12px;
+  border-radius: 12px;
+  background: white;
+  border: 1px solid #e5e7eb;
+  font-weight: bold;
+  margin-bottom: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+/* 위험 상태 버튼 */
+.manage-btn.danger {
+  border-color: #fecaca;
+  color: #b91c1c;
+  background: white;
+}
+
+/* ===== 버튼 스타일 (일반) ===== */
+.naver-btn {
+  flex: 1;
+  padding: 14px;
+  margin: 0;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  cursor: pointer;
+  background: #00c73c;
+  color: white;
+  font-weight: bold;
+  transition: all 0.2s;
+}
+
+.naver-btn:hover {
+  opacity: 0.9;
+}
+
+/* 카카오 지도 버튼 */
+.kakao-btn {
+  flex: 1;
+  padding: 14px;
+  margin: 0;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 12px;
+  font-size: 16px;
+  cursor: pointer;
+  background: #FEE500;
+  color: #111;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-weight: bold;
+  transition: all 0.2s;
+}
+
+.kakao-btn img {
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+/* ===== 활동 리스트 ===== */
+#activity-list {
+  list-style: none;
+  padding-left: 0;
+  margin-top: 12px;
+}
+
+.activity-item {
+  background: #fff;
+  border-radius: 10px;
+  padding: 12px;
+  margin-bottom: 10px;
+  border: 1px solid #f0f0f0;
+  cursor: pointer;
+}
+
+.activity-item .time {
+  color: #888;
+  font-size: 12px;
+  margin-top: 6px;
+}
+
+/* ===== 패널 액션 버튼 ===== */
+.panel-action-btn {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: #4a90e2;
+  font-weight: bold;
+  transition: all 0.2s;
+}
+
+.panel-action-btn:hover {
+  color: #2563eb;
+}
+
+.panel-action-btn.danger {
+  color: #ef4444;
+}
+
+/* ===== 패널 빈 상태 ===== */
+.panel-loader {
+  display: none;
+  padding: 20px;
+  text-align: center;
+  color: #888;
+}
+
+.panel-empty {
+  padding: 20px;
+  text-align: center;
+  color: #888;
+}
+
+.panel-empty i {
+  font-size: 22px;
+  margin-bottom: 8px;
+  display: block;
+}
+
+/* ===== 위치정보 수집·이용 동의 모달 ===== */
+.consent-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  z-index: 2000;
+}
+
+.consent-modal.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.consent-card {
+  width: min(520px, 100%);
+  background: #fff;
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.18);
+}
+
+.consent-header {
+  margin-bottom: 16px;
+}
+
+.consent-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: #fde68a;
+  color: #92400e;
+  font-weight: bold;
+  font-size: 12px;
+  margin-bottom: 10px;
+}
+
+.consent-desc {
+  color: #555;
+  margin-top: 8px;
+  line-height: 1.5;
+}
+
+.consent-list {
+  list-style: none;
+  padding: 12px 0 0 0;
+  margin: 0;
+  color: #444;
+  font-size: 14px;
+  display: grid;
+  gap: 6px;
+}
+
+.consent-list li::before {
+  content: '•';
+  margin-right: 6px;
+  color: #4a90e2;
+}
+
+.consent-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.consent-btn {
+  flex: 1;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.consent-btn.primary {
+  background: #4a90e2;
+  color: #fff;
+}
+
+.consent-btn.ghost {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.consent-footnote {
+  margin-top: 14px;
+  color: #9ca3af;
+  font-size: 12px;
+}
+
+/* 위치 버튼 비활성화 상태 */
+#locate-btn.is-disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* 댓글 섹션 */
+#pharmacy-comments-section {
+  margin-top: 6px;
+}
+
+#pharmacy-comments-list {
+  min-height: 0;
+  margin: 6px 0;
+}
+
+#pharmacy-comments-section h3 {
+  margin: 0 0 6px;
+}
+
+#pharmacy-comment-input {
+  min-height: 32px;
+}
+
+#pharmacy-comment-input {
+  flex: 1;
+  resize: vertical;
+  min-height: 36px;
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+
+#pharmacy-comment-submit {
+  padding: 8px 16px;
+  border-radius: 8px;
+  background: #4a90e2;
+  color: white;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+#pharmacy-comment-submit:hover {
+  background: #2563eb;
+}
+
+/* ===== 모바일 팝업 ===== */
+@media (max-width: 768px) {
+  #pharmacy-popup {
+    left: 0;
+    width: 100%;
+    max-height: 45vh;
+    border-radius: 20px 20px 0 0;
+    padding-bottom: 20px;
+    bottom: 70px;
+  }
+
+  #pharmacy-popup.show {
+    height: 45vh;
+    max-height: 45vh;
+  }
+
+  /* 모바일: 약물 그리드 2열 */
+  .drug-grid {
+    grid-template-columns: repeat(2, 1fr);
+    max-height: calc(100vh - 200px);
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 8px;
+  }
+
+  .drug-card {
+    flex-direction: column;
+    padding: 12px 8px;
+    gap: 10px;
+    min-height: auto;
+  }
+
+  .drug-card .drug-img {
+    width: 100%;
+    height: 120px;
+  }
+
+  .drug-card .drug-title {
+    font-size: 14px;
+  }
+
+  .drug-card .drug-desc {
+    font-size: 11px;
+  }
+
+  /* 모바일: 약물 상세 이미지 숨김 */
+  #panel-drug-img {
+    display: none;
+  }
+
+  /* 모바일: 구독 패널 */
+  #subscription-panel {
+    max-height: 40vh !important;
+    padding: 12px;
+    overflow-y: auto;
+  }
+}
+
+@media (max-width: 600px) {
+  .drug-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

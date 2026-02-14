@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>탈모맵</title>
+  <!-- 파비콘 -->
+  <link rel="icon" type="image/x-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='75'>💊</text></svg>">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  
+  <!-- ===== CSS 파일 분리 (모든 스타일이 별도 CSS 파일에 있음) ===== -->
+  <!-- main.css (기본 스타일: 폰트, 색상, 애니메이션, 글로벌 요소) -->
+  <link rel="stylesheet" href="css/main.css">
+  <!-- layout.css (페이지 레이아웃: 사이드바, 지도, 검색바, 사이드 패널의 구조) -->
+  <link rel="stylesheet" href="css/layout.css">
+  <!-- components.css (UI 컴포넌트: 약국 카드, 팝업, 버튼, 표 등) -->
+  <link rel="stylesheet" href="css/components.css">
+  <!-- responsive.css (반응형 스타일: 모바일/태블릿/데스크탑 화면 크기별 조정) -->
+  <link rel="stylesheet" href="css/responsive.css">
+  
+  <!-- 카카오 지도 SDK 로드 -->
+  <script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=0d2e650cecb8f7b3f79a14826495b876&libraries=services"></script>
+</head>
+<body>
+<div class="app-container">
+  <!-- 왼쪽 사이드바: 메뉴 및 구독 상태 표시 -->
+  <aside class="sidebar">
+    <div class="logo">
+      <span class="pill">💊</span> 탈모맵
+    </div>
+    <div class="trial-info">
+      <div class="trial-banner">
+        <span class="clock">⏱️</span>
+        <div class="time">남은 시간: 23시간 45분</div>
+      </div>
+    </div>
+    <nav class="menu">
+      <button class="menu-item active" data-page="map" title="지도" aria-label="지도"><i class="fas fa-map"></i><span class="menu-label">지도</span></button>
+      <button class="menu-item" data-page="list" title="약국" aria-label="약국"><i class="fas fa-list"></i><span class="menu-label">약국</span></button>
+      <button class="menu-item" data-page="activity" title="활동" aria-label="활동"><i class="fas fa-history"></i><span class="menu-label">활동</span></button>
+      <button class="menu-item" data-page="subscribe" title="구독" aria-label="구독"><i class="fas fa-crown"></i><span class="menu-label">구독</span></button>
+    </nav>
+  </aside>
+
+  <!-- 메인 컨텐츠 영역: 지도, 페이지, 사이드 패널 -->
+  <main class="main-content">
+    <!-- 지도 페이지 (기본 페이지) -->
+    <section id="page-map" class="page active">
+      <!-- 상단 검색바 (약국/약 검색) -->
+      <div class="search-bar-container">
+        <div class="search-wrapper">
+          <input type="text" class="search-bar" placeholder="약국이나 약 이름 검색...">
+          <button class="mic-btn"><i class="fas fa-microphone"></i></button>
+        </div>
+        <div style="margin-top:10px; text-align:center;">
+          <button id="find-nearby-btn" style="padding:10px 24px; border-radius:20px; background:#4a90e2; color:white; border:none; font-size:16px; font-weight:bold; box-shadow:0 2px 8px rgba(74,144,226,0.08); cursor:pointer;">주변 약국 찾기</button>
+        </div>
+      </div>
+      <!-- 지도 렌더링 영역 (map.js에서 초기화) -->
+      <div id="map"></div>
+
+      <!-- 사이드 패널: 약국 목록, 상세 정보, 활동, 구독 탭 -->
+      <aside class="side-panel" id="side-panel">
+        <button class="panel-close" id="panel-close">×</button>
+        <div class="panel-tabs">
+          <!-- 약국 목록 섹션 -->
+          <div id="panel-list" class="panel-section"></div>
+
+          <!-- 약국 상세 정보 섹션 -->
+          <div id="panel-detail" class="panel-section" style="display:none;">
+            <div class="panel-header">
+              <h3 id="panel-detail-title"></h3>
+              <div class="panel-actions"><button id="panel-detail-back" class="panel-action-btn">목록</button></div>
+            </div>
+            <div style="padding:8px 0 0 0;">
+              <p id="panel-detail-address" style="color:#666;margin-bottom:6px;"></p>
+              <p id="panel-detail-phone" style="color:#666;margin-bottom:6px;"></p>
+              <p id="panel-detail-hours" style="color:#666;margin-bottom:6px;font-size:13px;"></p>
+              <div style="display:flex;gap:8px;margin-top:8px;margin-bottom:6px;">
+                <button id="panel-kakao-view" class="kakao-btn">카카오 지도 보기</button>
+                <button class="naver-btn" id="panel-naver-btn">NAVER 지도 보기</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- 활동 기록 섹션 -->
+          <div id="panel-activity" class="panel-section" style="display:none;">
+            <div class="panel-header">
+              <h3><i class="fas fa-history"></i> 최근 활동</h3>
+              <div class="panel-actions"><button id="clear-activity-btn" class="panel-action-btn danger">삭제</button></div>
+            </div>
+            <div class="panel-loader" style="display:none;">로딩 중...</div>
+            <div class="panel-empty" style="padding:20px;text-align:center;color:#888;"><i class="fas fa-inbox" style="font-size:22px;margin-bottom:8px;display:block;"></i>활동이 없습니다</div>
+            <ul id="activity-list" style="list-style:none;padding-left:0;margin-top:12px;"></ul>
+          </div>
+
+          <!-- 구독 섹션 -->
+          <div id="panel-subscribe" class="panel-section" style="display:none;">
+            <div class="panel-header">
+              <h3><i class="fas fa-crown"></i> 구독</h3>
+            </div>
+            <div id="panel-sub-status" style="padding:12px;background:#f3f4f6;border-radius:8px;margin-bottom:12px;">상태: 로딩 중...</div>
+            <button id="panel-subscribe-btn" style="width:100%;padding:14px;background:#4a90e2;color:white;border:none;border-radius:10px;cursor:pointer;font-weight:bold;">구독하기</button>
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <!-- 활동 페이지 (구 index의 page-activity) -->
+    <section id="page-activity" class="page">
+      <h2 style="padding:16px;margin:0;">활동 내역</h2>
+      <p style="padding:16px;margin:0;">최근 방문 약국과 검색 기록이 표시됩니다.</p>
+      <div id="page-activity-list" style="padding:16px;"></div>
+    </section>
+
+    <!-- 구독 페이지 (구 index의 page-subscribe) -->
+    <section id="page-subscribe" class="page">
+      <h2 style="padding:16px;margin:0;">구독</h2>
+      <p style="padding:16px;margin:0;">990원/월로 무제한 이용 가능</p>
+    </section>
+  </main>
+</div> <!-- .app-container -->
+
+  <!-- 위치정보 수집·이용 동의 모달 -->
+  <div id="location-consent-modal" class="consent-modal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="consent-title" aria-describedby="consent-desc">
+    <div class="consent-card">
+      <div class="consent-header">
+        <div class="consent-badge">필수 동의</div>
+        <h2 id="consent-title">위치정보 수집·이용 동의</h2>
+        <p id="consent-desc" class="consent-desc">탈모맵은 주변 약국 검색을 위해 위치정보를 수집·이용합니다. 동의하지 않으면 내 위치 기능이 제한됩니다.</p>
+      </div>
+      <ul class="consent-list">
+        <li>수집 항목: 위치정보(위도/경도)</li>
+        <li>이용 목적: 주변 약국 검색 및 지도 표시</li>
+        <li>보관 기간: 목적 달성 즉시 파기</li>
+      </ul>
+      <div class="consent-actions">
+        <button id="consent-decline-btn" class="consent-btn ghost">거부</button>
+        <button id="consent-accept-btn" class="consent-btn primary">동의</button>
+      </div>
+      <p class="consent-footnote">동의는 최초 1회만 요청되며, 설정에서 변경할 수 있습니다.</p>
+    </div>
+  </div>
+
+  <!-- 구독 상태 표시 패널 (subscription.js에서 동적으로 생성/관리) -->
+  <div id="subscription-panel" style="display:none;">
+    <div id="panel-trial-banner" class="trial-banner" style="display:none;">
+      <span class="clock">⏱️</span>
+      <div class="time-text">남은 시간: <strong id="panel-trial-time">0시간</strong></div>
+    </div>
+    <div id="panel-status" class="status-card">
+      <h2>현재 상태</h2>
+      <p class="status-text" id="panel-status-text">구독되지 않음</p>
+    </div>
+    <div id="panel-subscribe-card" class="subscribe-card">
+      <div class="avatar">💊</div>
+      <h3>탈모맵 구독</h3>
+      <div class="price"><strong>990원</strong> <span style="font-size:14px;color:#666">/월</span></div>
+      <p class="muted" style="margin-top:10px;">이 앱을 이용하려면 월 990원 구독이 필요합니다. <strong>1일 무료 체험 제공</strong></p>
+      <button id="subscribe-btn" class="cta">구독하기 990원/월</button>
+    </div>
+    <div id="panel-payment-methods" style="padding-top:12px;">
+      <h3 style="margin:8px 0 12px 0;font-weight:bold;">결제 수단 선택</h3>
+      <div class="payment-methods">
+        <button class="pm-kakao">카카오페이</button>
+        <button class="pm-card"><i class="fas fa-credit-card"></i> 카드</button>
+        <button class="pm-apple"><i class="fab fa-apple"></i> Apple</button>
+      </div>
+    </div>
+    <div id="panel-management" style="display:none;margin-top:12px;">
+      <button id="change-payment-btn" class="manage-btn">결제 수단 변경</button>
+      <button id="cancel-subscribe-btn" class="manage-btn danger">구독 취소</button>
+    </div>
+    <p class="notice" style="margin-top:12px;color:#666;font-size:13px;">구독은 언제든지 취소할 수 있습니다.</p>
+  </div>
+
+  <!-- 토스트 알림 (toast.js에서 관리) -->
+  <div id="toast" class="toast" aria-live="polite" style="display:none;"></div>
+
+  <!-- 약국 상세 팝업 (아래쪽에서 올라옴) -->
+  <div id="pharmacy-popup">
+    <div class="popup-header">
+      <h2 id="popup-title">약국 정보</h2>
+      <button class="popup-close" id="popup-close">×</button>
+    </div>
+    <p id="popup-address"></p>
+    <p id="popup-phone"></p>
+    <p id="popup-hours" style="color:#666;margin-bottom:12px;font-size:13px;"></p>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;">
+      <button class="naver-btn" id="naver-map-btn">NAVER 지도 보기</button>
+      <button id="popup-kakao-view" class="kakao-btn">카카오 지도 보기</button>
+    </div>
+    <div id="pharmacy-comments-section" style="margin-top:6px;">
+      <h3 style="font-size:18px;margin:0 0 6px;">댓글</h3>
+      <div id="pharmacy-comments-list" style="min-height:0;margin:0 0 6px;"></div>
+      <div style="display:flex;gap:8px;align-items:flex-end;">
+        <textarea id="pharmacy-comment-input" placeholder="댓글을 입력하세요" style="flex:1;resize:vertical;min-height:32px;padding:8px;border-radius:8px;border:1px solid #ddd;"></textarea>
+        <button id="pharmacy-comment-submit" style="padding:8px 16px;border-radius:8px;background:#4a90e2;color:white;border:none;font-weight:bold;">등록</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== JavaScript 파일 로드 순서 (중요: 아래 순서를 지켜야 함) ===== -->
+  
+  <!-- 1. 설정 (다른 모듈의 기반이 되는 필수 파일) -->
+  <script src="js/config.js"></script>
+  <!-- config.js (설정: API 키, 상수값, 디버그 모드 등) -->
+  
+  <!-- 2. 유틸리티 (여러 모듈에서 공통으로 사용하는 함수들) -->
+  <script src="js/utils/storage.js"></script>
+  <!-- storage.js (저장소: localStorage CRUD 작업, 활동/구독/댓글 관리) -->
+  <script src="js/utils/helpers.js"></script>
+  <!-- helpers.js (헬퍼: 포맷팅, 검증, 디바운스/쓰로틀 유틸리티 함수들) -->
+  <script src="js/utils/api.js"></script>
+  <!-- api.js (API: 카카오 로컬 검색, 지오코딩, 에러 핸들링) -->
+  
+  <!-- 3. UI 컴포넌트 (사용자 인터페이스 요소 관리) -->
+  <script src="js/ui/toast.js"></script>
+  <!-- toast.js (알림: 성공/실패/경고 메시지 표시 및 자동 사라지기) -->
+  <script src="js/ui/panel.js"></script>
+  <!-- panel.js (패널: 사이드 패널 열기/닫기, 섹션 전환, 지도 팬 효과) -->
+  
+  <!-- 4. 지도 초기화 (카카오 지도 SDK 로드 및 마커 생성) -->
+  <script src="js/map.js"></script>
+  <!-- map.js (지도: 카카오 맵 초기화, 마커 렌더링, 오버레이 관리) -->
+  
+  <!-- 5. 기능 모듈들 (각 기능별 비즈니스 로직) -->
+  <script src="js/features/pharmacy.js"></script>
+  <!-- pharmacy.js (약국: 목록 렌더링, 상세 표시, 검색, 댓글 관리) -->
+  <script src="js/features/consent.js"></script>
+  <!-- consent.js (동의: 위치정보 수집·이용 동의 모달, 로컬스토리지 관리) -->
+  
+  <!-- 5-1. 위치 및 지도 기능 (분리된 모듈) -->
+  <script src="js/features/location/userLocation.js"></script>
+  <!-- userLocation.js (위치: 현재 위치 조회, 사용자 마커 표시) -->
+  <script src="js/features/location/pharmacyMarker.js"></script>
+  <!-- pharmacyMarker.js (마커: 약국 마커 생성, 표시, 제거) -->
+  <script src="js/features/location/pharmacySearch.js"></script>
+  <!-- pharmacySearch.js (검색: 주변 약국 검색, 목록 업데이트) -->
+  <script src="js/features/location/pharmacyPopup.js"></script>
+  <!-- pharmacyPopup.js (팝업: 약국 상세 정보 표시) -->
+  <script src="js/features/location/panelInteraction.js"></script>
+  <!-- panelInteraction.js (패널: 드래그, 토글 기능) -->
+  <script src="js/features/location/mapAnimation.js"></script>
+  <!-- mapAnimation.js (애니메이션: 줌, 중심 이동 애니메이션) -->
+  <script src="js/features/location.js"></script>
+  <!-- location.js (위치 관리자 메인: 초기화, 이벤트 연결) -->
+  <script src="js/features/activity.js"></script>
+  <!-- activity.js (활동: 활동 기록 CRUD, 시간 ago 포맷팅, 삭제 기능) -->
+  <script src="js/features/subscription.js"></script>
+  <!-- subscription.js (구독: 구독 상태 관리, UI 업데이트, 결제 시뮬레이션) -->
+  
+  <!-- 6. 메인 앱 진입점 (마지막에 로드하여 모든 모듈 초기화) -->
+  <script src="js/main.js"></script>
+  <!-- main.js (진입점: 앱 초기화, 모듈 검증, 글로벌 이벤트 리스너 설정) -->
+</body>
+</html>
